@@ -9,20 +9,25 @@ function Home() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [postList, setPostList] = useState([]);
 
-    useEffect(() => {
+    const refreshPost = () => {
         fetch("/posts")
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    setIsLoaded(true);
-                    setPostList(result);
-                },
-                (error) => {
-                    setIsLoaded(true);
-                    setError(error);
-                }
-            )
-    }, []);
+        .then(res => res.json())
+        .then(
+            (result) => {
+                setIsLoaded(true);
+                setPostList(result);
+            },
+            (error) => {
+                setIsLoaded(true);
+                setError(error);
+            }
+        )
+    }
+    
+
+    useEffect(() => {
+        refreshPost();
+    }, [postList]);
 
     if (error) {
         return <div>Error!!!</div>;
@@ -34,7 +39,7 @@ function Home() {
     <React.Fragment>
       
       <div style={{backgroundColor:'#FFFAF0', display:'flex', flexWrap:'wrap', justifyContent:'center', alignItems:'center'  }} >
-            <PostForm userId={1} userName={"asdgfsadg"} title={"arda"} text={"post.text"}></PostForm>
+            <PostForm userId={2} userName={"asdgfsadg"} refreshPost={refreshPost} ></PostForm>
                 {postList.map(post => (
                     <Post userId={post.userId} userName={post.userName} title={post.title} text={post.text}></Post> 
                      

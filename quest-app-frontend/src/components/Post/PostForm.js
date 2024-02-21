@@ -7,49 +7,90 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
-import { Button, InputAdornment, OutlinedInput } from '@mui/material';
+import { Alert, Button, InputAdornment, OutlinedInput, Snackbar} from '@mui/material';
+import axios from 'axios';
 // import { ReactDOM } from 'react';
 
 
 function PostForm(props) {
-    const { userName} = props;
+    const { userName, userId, refreshPost} = props;
     const [title, setTitle] = React.useState('');
     const [text, setText] = React.useState('');
+    const [isSent, setIsSent] = React.useState(false);
+  
+
+
+    const savePost = () => {
+        axios.post('/posts', {
+            title: title,
+            text: text,
+            userId: userId
+          })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }   
+
     const handleSubmit = () => {
-        console.log(title);
-        console.log(text);
+        savePost();
+        setIsSent(true);
+        setTitle('');
+        setText('');
+        refreshPost();
     }
+
     const handleTitle = (title) => {
         setTitle(title);
+        setIsSent(false);
     }
+
     const handleText = (text) => {
         setText(text);
+        setIsSent(false);
     }
 
-    return (
-        <Card sx={{ width: 800, margin:3 }}>
-      <CardHeader
-        avatar={
-          
-            <Link style={{textDecoration:'none'}} to={{pathname : '/users/' + props.userId}} >
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            {userName.charAt(0).toUpperCase()}
-            </Avatar>
-            </Link>
-          
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
         }
-        
-        title={<OutlinedInput
-        id="outlined-adornment-amount"
-        multiline
-        placeholder='Title'
-        inputProps={{maxLength:"25"}}
-        fullWidth
-        onChange={(i) => handleTitle(i.target.value)}>
+    
+        setIsSent(false);
+      };
 
-        </OutlinedInput>
-        }
-      />
+    return (
+        <div>
+        <Snackbar anchorOrigin={{ vertical:'bottom', horizontal:'center' }} open={isSent} autoHideDuration={2000} onClose={handleClose}>
+        <Alert variant="filled" severity="success">
+            Post shared successfully
+        </Alert>
+        </Snackbar>
+        <Card sx={{ width: 800, margin:3 }}>
+        <CardHeader
+            avatar={
+            
+                <Link style={{textDecoration:'none'}} to={{pathname : '/users/' + props.userId}} >
+                <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                {userName.charAt(0).toUpperCase()}
+                </Avatar>
+                </Link>
+            
+            }
+            
+            title={<OutlinedInput
+            id="outlined-adornment-amount"
+            multiline
+            placeholder='Title'
+            inputProps={{maxLength:"25"}}
+            fullWidth
+            value={title}
+            onChange={(i) => handleTitle(i.target.value)}>
+
+            </OutlinedInput>
+            }
+        />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
          {<OutlinedInput
@@ -58,12 +99,13 @@ function PostForm(props) {
         placeholder='Text'
         inputProps={{maxLength:"400"}}
         fullWidth
+        value={text}
         onChange={(i) => handleText(i.target.value)}
         endAdornment={
             <InputAdornment position="end">
                 <Button 
                 variant="contained" 
-                style={{ background: 'linear-gradient(to right top, #f30101, #60060c)'}}
+                sx={{ background: 'linear-gradient(to right top, #f30101, #60060c)'}}
                 onClick={handleSubmit}
                 >Post
                 </Button>
@@ -73,6 +115,7 @@ function PostForm(props) {
         </Typography>
       </CardContent>
     </Card>
+    </div>
     )
 }
 

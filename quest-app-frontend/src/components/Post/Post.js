@@ -43,17 +43,16 @@ function Post(props) {
         avatar={
           
             <Link style={{textDecoration:'none'}} to={{pathname : '/users/' + props.userId}} >
-            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" >
             {userName.charAt(0).toUpperCase()}
             </Avatar>
             </Link>
-          
         }
-        
+        style={{textAlign:'left'}}
         title={title.charAt(0).toUpperCase() + title.slice(1)}
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" style={{textAlign:'left'}}>
          {text.charAt(0).toUpperCase() + text.slice(1)}
         </Typography>
       </CardContent>
