@@ -2,6 +2,9 @@ package com.project.questapp.entities;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,14 +26,16 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="post_id", nullable=false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	Post post;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
 	User user;
 	
 	@Lob

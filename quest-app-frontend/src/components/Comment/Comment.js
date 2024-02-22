@@ -3,16 +3,23 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { red } from '@mui/material/colors';
 
+
+
 function Comment(props) {
     const { userName, text, userId } = props;
+
     return (
         <div>
-            <CardContent>
+            <CardContent sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start', alignItems: 'center' }} >
                 <OutlinedInput
-                disabled
+                sx={{
+                        "& .MuiInputBase-input.Mui-disabled": {
+                        WebkitTextFillColor: "#000000",
+                        },
+                    }}
+                    disabled
                 id="outlined-adornment-amount"
                 multiline
-                placeholder="Title"
                 inputProps={{maxLength: 25}}
                 fullWidth
                 value={text}
@@ -25,7 +32,7 @@ function Comment(props) {
                         </Link>
                     </InputAdornment>
                 }
-                style={{color:'black', backgroundColor:'#FFFAF0'}}
+                
                 >
                 </OutlinedInput>
             </CardContent>

@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import Comment from '../Comment/Comment';
 import { Container } from '@mui/material';
+import CommentForm from '../Comment/CommentForm';
 // import { ReactDOM } from 'react';
 
 const ExpandMore = styled((props) => {
@@ -30,13 +31,16 @@ const ExpandMore = styled((props) => {
   }));
  
 function Post(props) {
-    const { userName, title, text, postId, userId} = props;
+    const { userName, title, text, postId, userId, likes} = props;
     const [expanded, setExpanded] = React.useState(false);
     const [liked, setLiked] = useState(false);
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [commentList, setCommentList] = useState([]);
     const isInitialMount = React.useRef(true);
+    const likeCount = likes.length; 
+
+    
     const handleExpandClick = () => {
         setExpanded(!expanded);
         refreshComments();
@@ -69,6 +73,7 @@ function Post(props) {
         refreshComments();
       }
     },[commentList]);
+
     return (
         <Card sx={{ width: 800, margin:3 }}>
       <CardHeader
@@ -94,6 +99,7 @@ function Post(props) {
         aria-label="add to favorites">
           <FavoriteIcon style={liked? {color:'red'} : null} />
         </IconButton>
+        {likeCount}
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
@@ -104,12 +110,13 @@ function Post(props) {
         </ExpandMore>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
+      
         <Container fixed>
         {error? "error" :
         isLoaded? commentList.map(comment => (
-                    <Comment userId={1} userName={"User"} text={comment.text}></Comment> 
-                     
+                    <Comment userId={1} userName={"ardakaya"} text={comment.text}></Comment> 
                 )) : "Loading..."}
+              <CommentForm  userId={1} userName={"User"} postId={postId} refreshComments={refreshComments}></CommentForm>
         </Container>
       </Collapse>
     </Card>

@@ -30,17 +30,17 @@ public class CommentService {
 	}
 
 	//Comment GetMapping Annotations
-	public List<CommentResponse> getAllComments(Optional<Long> userId, Optional<Long> postId) {
-		List<Comment> comments;
+	public List<Comment> getAllComments(Optional<Long> postId, Optional<Long> userId) {
+//		List<Comment> comments;
 		if(userId.isPresent() && postId.isPresent()){
-			comments =  commentRepository.findByUserIdAndPostId(postId.get(), userId.get());
+			return commentRepository.findByUserIdAndPostId(postId.get(), userId.get());
 		}else if(postId.isPresent()) {
-			comments = commentRepository.findByPostId(postId.get());
+			return commentRepository.findByPostId(postId.get());
 		}else if(userId.isPresent()){
-			comments = commentRepository.findByUserId(userId.get());
+			return commentRepository.findByUserId(userId.get());
 		}else 
-			comments = commentRepository.findAll();
-		return comments.stream().map(comment -> new CommentResponse(comment)).collect(Collectors.toList());
+			return commentRepository.findAll();
+//		return comments.stream().map(comment -> new CommentResponse(comment)).collect(Collectors.toList());
 	}
 
 	// GetMapping("/{commentId}")

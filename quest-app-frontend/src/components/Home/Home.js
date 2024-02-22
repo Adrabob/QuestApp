@@ -26,7 +26,7 @@ function Home() {
     
 
     useEffect(() => {
-        refreshPost();
+         refreshPost();
     }, [postList]);
 
     if (error) {
@@ -39,9 +39,9 @@ function Home() {
     <React.Fragment>
       
       <div style={{backgroundColor:'#FFFAF0', display:'flex', flexWrap:'wrap', justifyContent:'center', alignItems:'center'  }} >
-            <PostForm userId={2} userName={"asdgfsadg"} refreshPost={refreshPost} ></PostForm>
+            <PostForm userId={1} userName={"asdgfsadg"} refreshPost={refreshPost} ></PostForm>
                 {postList.map(post => (
-                    <Post postId={post.id} userId={post.userId} userName={post.userName} title={post.title} text={post.text}></Post> 
+                    <Post likes={post.postLikes} postId={post.id} userId={post.userId} userName={post.userName} title={post.title} text={post.text}></Post> 
                      
                 ))}
 

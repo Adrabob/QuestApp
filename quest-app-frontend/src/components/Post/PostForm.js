@@ -19,7 +19,6 @@ function PostForm(props) {
     const [isSent, setIsSent] = React.useState(false);
   
 
-
     const savePost = () => {
         axios.post('/posts', {
             title: title,
@@ -71,7 +70,7 @@ function PostForm(props) {
         <CardHeader
             avatar={
             
-                <Link style={{textDecoration:'none'}} to={{pathname : '/users/' + props.userId}} >
+                <Link style={{textDecoration:'none'}} to={{pathname : '/users/' + userId}} >
                 <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
                 {userName.charAt(0).toUpperCase()}
                 </Avatar>
