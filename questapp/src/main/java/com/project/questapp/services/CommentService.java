@@ -2,7 +2,7 @@ package com.project.questapp.services;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 
@@ -12,6 +12,7 @@ import com.project.questapp.entities.User;
 import com.project.questapp.repos.CommentRepository;
 import com.project.questapp.requests.CommentCreateRequest;
 import com.project.questapp.requests.CommentUpdateRequest;
+import com.project.questapp.responses.CommentResponse;
 
 @Service
 public class CommentService {
@@ -29,17 +30,17 @@ public class CommentService {
 	}
 
 	//Comment GetMapping Annotations
-	public List<Comment> getAllComments(Optional<Long> postId, Optional<Long> userId) {
-	
+	public List<CommentResponse> getAllComments(Optional<Long> userId, Optional<Long> postId) {
+		List<Comment> comments;
 		if(userId.isPresent() && postId.isPresent()){
-			return commentRepository.findByUserIdAndPostId(postId.get(), userId.get());
-		}else if(postId.isPresent() && !userId.isPresent()) {
-			return commentRepository.findByPostId(postId.get());
-		}else if(userId.isPresent() && !postId.isPresent()){
-			return commentRepository.findByUserId(userId.get());
-		}else {
-			return commentRepository.findAll();
-		}
+			comments =  commentRepository.findByUserIdAndPostId(postId.get(), userId.get());
+		}else if(postId.isPresent()) {
+			comments = commentRepository.findByPostId(postId.get());
+		}else if(userId.isPresent()){
+			comments = commentRepository.findByUserId(userId.get());
+		}else 
+			comments = commentRepository.findAll();
+		return comments.stream().map(comment -> new CommentResponse(comment)).collect(Collectors.toList());
 	}
 
 	// GetMapping("/{commentId}")
@@ -47,16 +48,16 @@ public class CommentService {
 		return commentRepository.findById(commentId).orElse(null);
 	}
 	
-	//PostMapping for create new post
-	public Comment createOneComment(CommentCreateRequest newCommentCreateRequest) {
-		User user = userService.getOneUserById (newCommentCreateRequest.getUserId());
-		Post post = postService.getOnePostById (newCommentCreateRequest.getPostId());
+	//PostMapping for create new comment
+	public Comment createOneComment(CommentCreateRequest request) {
+		User user = userService.getOneUserById (request.getUserId());
+		Post post = postService.getOnePostById (request.getPostId());
 		if(user != null && post != null) {
 			Comment toSaveComment = new Comment();
-			toSaveComment.setId(newCommentCreateRequest.getId());
-			toSaveComment.setText(newCommentCreateRequest.getText());
+			toSaveComment.setId(request.getId());
 			toSaveComment.setUser(user);
 			toSaveComment.setPost(post);
+			toSaveComment.setText(request.getText());
 			return commentRepository.save(toSaveComment);
 		}else 
 			return null;
