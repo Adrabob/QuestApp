@@ -16,7 +16,7 @@ public class CommentResponse {
 	public CommentResponse(Comment entity) {
 		this.id = entity.getId();
 		this.userId = entity.getUser().getId();
-		this.userName = entity.getUser().getUsername();
+		this.userName = entity.getUser().getUserName();
 		this.text = entity.getText();
 	}
 	

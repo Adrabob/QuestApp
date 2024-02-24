@@ -9,22 +9,25 @@ import com.project.questapp.entities.User;
 import com.project.questapp.repos.UserRepository;
 import com.project.questapp.security.JWTUserDetails;
 
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+	
 	private UserRepository userRepository;
 	
 	public UserDetailsServiceImpl(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 
-
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
 		User user = userRepository.findByUserName(username);		
 		return JWTUserDetails.create(user);
 	}
+	
 	
 	public UserDetails loadUserById(Long id) {
 		User user = userRepository.findById(id).get();		

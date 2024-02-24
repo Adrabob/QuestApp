@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.project.questapp.entities.Like;
 import com.project.questapp.entities.Post;
 import com.project.questapp.entities.User;
 import com.project.questapp.repos.PostRepository;

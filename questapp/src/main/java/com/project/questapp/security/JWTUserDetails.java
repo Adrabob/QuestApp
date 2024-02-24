@@ -32,7 +32,7 @@ public class JWTUserDetails implements UserDetails{
 	public static JWTUserDetails create(User user) {
 		List<GrantedAuthority> authoritiesList = new ArrayList<>();
 		authoritiesList.add(new SimpleGrantedAuthority("user"));
-		return new JWTUserDetails(user.getId(), user.getUsername(), user.getPassword(), authoritiesList);
+		return new JWTUserDetails(user.getId(), user.getUserName(), user.getPassword(), authoritiesList);
 	}
 	
 	
