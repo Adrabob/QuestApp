@@ -159,9 +159,10 @@ function Post(props) {
         <Container fixed>
         {error? "error" :
         isLoaded? commentList.map(comment => (
-                    <Comment userId={1} userName={"ardakaya"} text={comment.text}></Comment> 
+                    <Comment userId={comment.userId} userName={comment.userName} text={comment.text}></Comment> 
                 )) : "Loading..."}
-              <CommentForm  userId={1} userName={"User"} postId={postId} refreshComments={refreshComments}></CommentForm>
+                {localStorage.getItem("currentUser") == null ? "" :
+                <CommentForm  userId={localStorage.getItem("currentUser")} userName={localStorage.getItem("userName")} postId={postId} refreshComments={refreshComments}></CommentForm>}
         </Container>
       </Collapse>
     </Card>

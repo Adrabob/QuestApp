@@ -1,12 +1,13 @@
 import { Button, FormControl, FormHelperText, Input, InputLabel } from "@mui/material";
 import axios from "axios";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Auth() {
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-    // let history = unstable_HistoryRouter();
+    let navigate = useNavigate();
 
     const handleUsername = (username) => {
         setUsername(username);
@@ -18,16 +19,18 @@ function Auth() {
 
     const sendRequest = (path) => {
         axios.post("/auth/"+path, {
+            
             userName: username,
             password: password
         })
         .then((response) => {
             console.log(response);
+            localStorage.setItem("tokenKey", JSON.stringify(response.data.message));
+            localStorage.setItem("currentUser", JSON.stringify(response.data.userId));
+            localStorage.setItem("userName", username);
         })
         .then((result) => {
-            localStorage.setItem("tokenKey", result.message);
-            localStorage.setItem("currentUser", result.userId);
-            localStorage.setItem("username", username);
+            
         })
         .catch((error) => {
             console.log(error);
@@ -39,8 +42,8 @@ function Auth() {
         sendRequest(value);
         setPassword("");
         setUsername("");
-        console.log(localStorage);
-        // history.go(-1);
+        console.log(localStorage.getItem("currentUser"));
+        navigate(0);
     }
 
    

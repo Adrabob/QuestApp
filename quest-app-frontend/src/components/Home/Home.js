@@ -27,7 +27,7 @@ function Home() {
 
     useEffect(() => {
          refreshPost();
-    }, [postList]);
+    }, []);
 
     if (error) {
         return <div>Error!!!</div>;
@@ -36,17 +36,18 @@ function Home() {
     } else {
         return (
             
-    <React.Fragment>
+    
       
       <div style={{backgroundColor:'#FFFAF0', display:'flex', flexWrap:'wrap', justifyContent:'center', alignItems:'center'  }} >
-            <PostForm userId={1} userName={"asdgfsadg"} refreshPost={refreshPost} ></PostForm>
+      {localStorage.getItem("currentUser") == null ?"":<PostForm userId={localStorage.getItem("currentUser")} userName={localStorage.getItem("userName")} refreshPost={refreshPost}/>}
+            
                 {postList.map(post => (
                     <Post likes={post.postLikes} postId={post.id} userId={post.userId} userName={post.userName} title={post.title} text={post.text}></Post> 
                      
                 ))}
 
       </div>
-    </React.Fragment>
+    
                 
         );
     }
