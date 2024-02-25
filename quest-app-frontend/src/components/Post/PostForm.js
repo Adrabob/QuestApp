@@ -24,12 +24,19 @@ function PostForm(props) {
             title: title,
             text: text,
             userId: userId
+          },{
+            headers: {
+              "Authorization": localStorage.getItem("tokenKey"), 
+              'Content-Type': 'application/json'},
           })
           .then(function (response) {
             console.log(response);
+            
           })
           .catch(function (error) {
             console.log(error);
+            console.log(text);
+            console.log(title);
           });
     }   
 

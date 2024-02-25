@@ -56,6 +56,7 @@ function Post(props) {
             setCommentList(result);
         },
         (error) => {
+          console.log(error);
             setIsLoaded(true);
             setError(error);
         }
@@ -66,18 +67,29 @@ function Post(props) {
   const saveLike = () => {
     axios.post('/likes', {
         postId: postId,
-        userId: userId
+        userId: localStorage.getItem("currentUser")
+      },{
+        headers: {
+          "Authorization": localStorage.getItem("tokenKey"), 
+          'Content-Type': 'application/json'},
       })
       .then(function (response) {
         console.log(response);
+        console.log(localStorage.getItem("tokenKey"));
       })
       .catch(function (error) {
         console.log(error);
+        console.log(localStorage.getItem("tokenKey"));
       });
   }
 
   const deleteLike = () => {
-    axios.delete('/likes/'+likeId)
+    axios.delete('/likes/'+likeId,{
+      headers: {
+        "Authorization": localStorage.getItem("tokenKey"), 
+        'Content-Type': 'application/json'
+        },
+    })
     .catch(function (error) {
       console.log(error);
     });
@@ -101,7 +113,7 @@ function Post(props) {
   }
 
   const checkLikes = () => {
-     var likeControl = likes.find(like => like.userId === userId);
+     var likeControl = likes.find(like => ""+like.userId === localStorage.getItem("currentUser"));
      if(likeControl != null){
         setLikeId(likeControl.id);
         setIsLiked(true);
@@ -110,11 +122,10 @@ function Post(props) {
 
 
   useEffect(() => {
-    if (isInitialMount.current) {
+    if (isInitialMount.current) 
       isInitialMount.current = false;
-    } else {
+    else 
       refreshComments();
-    }
   },[refresh]);
 
   useEffect(() => {checkLikes()},[]);
@@ -139,11 +150,18 @@ function Post(props) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
+      {localStorage.getItem("currentUser") == null ? 
+        <IconButton 
+        disabled
+        aria-label="add to favorites">
+          <FavoriteIcon style={isLiked? {color:'red'} : null} />
+        </IconButton>:
         <IconButton 
         onClick={handleLike}
         aria-label="add to favorites">
           <FavoriteIcon style={isLiked? {color:'red'} : null} />
         </IconButton>
+      }
         {likeCount}
         <ExpandMore
           expand={expanded}

@@ -14,6 +14,10 @@ function CommentForm(props) {
             postId: postId,
             text: text,
             userId: userId
+          },{
+            headers: {
+              "Authorization": localStorage.getItem("tokenKey"), 
+              'Content-Type': 'application/json'},
           })
           .then(function (response) {
             console.log(response);

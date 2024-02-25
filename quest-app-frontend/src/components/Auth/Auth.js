@@ -19,18 +19,15 @@ function Auth() {
 
     const sendRequest = (path) => {
         axios.post("/auth/"+path, {
-            
             userName: username,
             password: password
         })
         .then((response) => {
             console.log(response);
-            localStorage.setItem("tokenKey", JSON.stringify(response.data.message));
-            localStorage.setItem("currentUser", JSON.stringify(response.data.userId));
+            localStorage.setItem("tokenKey", response.data.message);
+            localStorage.setItem("currentUser", response.data.userId);
             localStorage.setItem("userName", username);
-        })
-        .then((result) => {
-            
+           
         })
         .catch((error) => {
             console.log(error);
@@ -42,7 +39,6 @@ function Auth() {
         sendRequest(value);
         setPassword("");
         setUsername("");
-        console.log(localStorage.getItem("currentUser"));
         navigate(0);
     }
 
