@@ -41,6 +41,11 @@ function Post(props) {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(likes.length);
   const [likeId, setLikeId] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+
+  const setCommentRefresh = () => {
+    setRefresh(true);
+  }
 
   const refreshComments = () => {
     fetch("/comments?postId=" + postId)
@@ -55,6 +60,7 @@ function Post(props) {
             setError(error);
         }
     )
+    setRefresh(false);
   }
 
   const saveLike = () => {
@@ -109,7 +115,7 @@ function Post(props) {
     } else {
       refreshComments();
     }
-  },[commentList]);
+  },[refresh]);
 
   useEffect(() => {checkLikes()},[]);
 
