@@ -5,7 +5,7 @@ import { red } from '@mui/material/colors';
 import axios from 'axios';
 
 function CommentForm(props) {
-    const { userName, userId, postId } = props;
+    const { userName, userId, postId, setCommentRefresh } = props;
     const [text, setText] = React.useState('');
 
 
@@ -30,6 +30,7 @@ function CommentForm(props) {
     const handleSubmit = () => {
         saveComment();
         setText('');
+        setCommentRefresh(true);
     }
 
     const handleText = (text) => {

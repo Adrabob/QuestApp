@@ -57,43 +57,15 @@ function Post(props) {
         },
         (error) => {
           console.log(error);
-            setIsLoaded(true);
-            setError(error);
+          setIsLoaded(true);
+          setError(error);
         }
     )
     setRefresh(false);
   }
 
-  const saveLike = () => {
-    axios.post('/likes', {
-        postId: postId,
-        userId: localStorage.getItem("currentUser")
-      },{
-        headers: {
-          "Authorization": localStorage.getItem("tokenKey"), 
-          'Content-Type': 'application/json'},
-      })
-      .then(function (response) {
-        console.log(response);
-        console.log(localStorage.getItem("tokenKey"));
-      })
-      .catch(function (error) {
-        console.log(error);
-        console.log(localStorage.getItem("tokenKey"));
-      });
-  }
 
-  const deleteLike = () => {
-    axios.delete('/likes/'+likeId,{
-      headers: {
-        "Authorization": localStorage.getItem("tokenKey"), 
-        'Content-Type': 'application/json'
-        },
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
+  
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -101,34 +73,59 @@ function Post(props) {
     console.log(commentList);
   };
 
-  const handleLike = () => {
+  const handleLike = async () => {
     setIsLiked(!isLiked);
-    if(isLiked){
-      deleteLike();
-      setLikeCount(likeCount-1);
-    }else{
-      saveLike();
-      setLikeCount(likeCount+1);
-    }
-  }
 
-  const checkLikes = () => {
-     var likeControl = likes.find(like => ""+like.userId === localStorage.getItem("currentUser"));
-     if(likeControl != null){
-        setLikeId(likeControl.id);
+    if (isLiked) { // User unliked the post
+      try {
+        await axios.delete('/likes/' + likeId, {
+          headers: {
+            Authorization: localStorage.getItem("tokenKey"),
+            'Content-Type': 'application/json'
+          }
+        });
+        setLikeCount(likeCount - 1);
+        setLikeId(null);
+        setIsLiked(false);
+      } catch (error) {
+        console.error("Error deleting like:", error);
+      }
+    } else { // User liked the post
+      try {
+        const response = await axios.post('/likes', {
+          postId,
+          userId: localStorage.getItem("currentUser")
+        }, {
+          headers: {
+            Authorization: localStorage.getItem("tokenKey"),
+            'Content-Type': 'application/json'
+          }
+        });
+        setLikeId(response.data.id); // Set likeId immediately from response
+        setLikeCount(likeCount + 1);
         setIsLiked(true);
-     }
-  }
+      } catch (error) {
+        console.error("Error saving like:", error);
+      }
+    }
+  };
+
+  const checkLikes = useEffect(() => {
+    const likeControl = likes.find(like => ""+like.userId === localStorage.getItem("currentUser"));
+    if (likeControl) {
+      setLikeId(likeControl.id);
+      setIsLiked(true);
+    }
+  }, [likes]); // Update likeId and isLiked when likes prop changes
 
 
   useEffect(() => {
-    if (isInitialMount.current) 
+    if (isInitialMount.current) {
       isInitialMount.current = false;
-    else 
+    } else {
       refreshComments();
-  },[refresh]);
-
-  useEffect(() => {checkLikes()},[]);
+    }
+  }, [refresh]);
 
     return (
         <Card sx={{ width: 800, margin:3 }}>
@@ -180,7 +177,7 @@ function Post(props) {
                     <Comment userId={comment.userId} userName={comment.userName} text={comment.text}></Comment> 
                 )) : "Loading..."}
                 {localStorage.getItem("currentUser") == null ? "" :
-                <CommentForm  userId={localStorage.getItem("currentUser")} userName={localStorage.getItem("userName")} postId={postId} refreshComments={refreshComments}></CommentForm>}
+                <CommentForm  userId={localStorage.getItem("currentUser")} userName={localStorage.getItem("userName")} postId={postId} setCommentRefresh={setCommentRefresh}></CommentForm>}
         </Container>
       </Collapse>
     </Card>

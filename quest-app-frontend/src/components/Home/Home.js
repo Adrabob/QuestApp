@@ -18,6 +18,7 @@ function Home() {
                 setPostList(result);
             },
             (error) => {
+                console.log(error);
                 setIsLoaded(true);
                 setError(error);
             }
