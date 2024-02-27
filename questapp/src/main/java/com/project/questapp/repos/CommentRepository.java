@@ -3,6 +3,8 @@ package com.project.questapp.repos;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.project.questapp.entities.Comment;
 
@@ -14,7 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	List<Comment> findByUserId(Long userId);
 
 	List<Comment> findByUserIdAndPostId(Long userId, Long postId);
-
 	
-
+	@Query(value="select * from comment where post_id in :postsIds limit 5", nativeQuery = true)
+	List<Comment> findUserCommentByPostId(@Param("postsIds") List<Long> postsIds);
 }

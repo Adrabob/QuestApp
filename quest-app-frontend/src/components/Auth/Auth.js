@@ -39,9 +39,9 @@ function Auth() {
         sendRequest(value);
         setPassword("");
         setUsername("");
-        localStorage.getItem("tokenKey");
-        localStorage.getItem("currentUser");
-        localStorage.getItem("userName");
+        console.log(localStorage.getItem("tokenKey"));
+        console.log(localStorage.getItem("currentUser"));
+        console.log(localStorage.getItem("userName"));
     }
 
     return (

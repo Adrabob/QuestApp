@@ -5,29 +5,24 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Grid, List, ListItem, ListItemSecondaryAction, Modal, Radio } from '@mui/material';
-import { Padding } from '@mui/icons-material';
+import { List, ListItem, ListItemSecondaryAction, Modal, Radio } from '@mui/material';
 
-function Avatar() {
+function Avatar(props) {
+    const {avatarId} = props; 
     const [open, setOpen] = React.useState(false);
-    const [selectedValue, setSelectedValue] = React.useState(1);
+    const [selectedValue, setSelectedValue] = React.useState(avatarId);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
+        console.log(localStorage.getItem("tokenKey"));
     }
 
   return (
     <div>
-    <Grid container
-    spacing={0}
-    direction="column"
-    alignItems="center"
-    justifyContent="center"
-    sx={{ minHeight: '50vh' }}>
-    <Card>
+    <Card sx={{ minWidth:200, m:3}}>
       <CardMedia
-        height={"300px"}
+        height="200"
         component="img"
         image={`/avatars/avatar${selectedValue}.png`}
         title="User Avatar"
@@ -41,22 +36,22 @@ function Avatar() {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={handleOpen} sx={{ml: 10.5}} >Change Avatar</Button>
+        <Button size="small" onClick={handleOpen} >Change Avatar</Button>
       </CardActions>
     </Card>
-    </Grid>
+    
     <Modal
     open={open}
     onClose={handleClose}
     aria-labelledby="modal-modal-title"
     aria-describedby="modal-modal-description"
+    style={{display:'flex', justifyContent:'center', alignItems:'center'}}
     >
     
     <List dense sx={{ width: '100%', maxWidth: 150, bgcolor: 'background.paper'}} >
       {[1, 2, 3, 4, 5, 6, 7].map((value) => {
         const labelId = `checkbox-list-secondary-label-${value}`;
         return (
-            
           <ListItem key={value}>
             <CardMedia
             style={{width: 75, height: 75}}
