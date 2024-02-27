@@ -27,7 +27,7 @@ function Auth() {
             localStorage.setItem("tokenKey", response.data.message);
             localStorage.setItem("currentUser", response.data.userId);
             localStorage.setItem("userName", username);
-           
+            navigate(0);
         })
         .catch((error) => {
             console.log(error);
@@ -39,11 +39,10 @@ function Auth() {
         sendRequest(value);
         setPassword("");
         setUsername("");
-        navigate(0);
+        localStorage.getItem("tokenKey");
+        localStorage.getItem("currentUser");
+        localStorage.getItem("userName");
     }
-
-   
-        
 
     return (
         
