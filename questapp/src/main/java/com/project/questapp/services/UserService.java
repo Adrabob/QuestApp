@@ -69,8 +69,8 @@ public class UserService {
 		if(postsIds.isEmpty()) {
 			return null;
 		}else {
-		List<Comment> comments = commentRepository.findUserCommentByPostId(postsIds);
-		List<Like> likes = likeRepository.findUserLikesByPostId(postsIds);
+		List<Object> comments = commentRepository.findUserCommentByPostId(postsIds);
+		List<Object> likes = likeRepository.findUserLikesByPostId(postsIds);
 		List<Object> result = new ArrayList<>();
 		result.addAll(comments);
 		result.addAll(likes);

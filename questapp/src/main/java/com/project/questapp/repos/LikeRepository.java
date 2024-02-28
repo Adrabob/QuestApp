@@ -16,7 +16,9 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
 	List<Like> findByUserIdAndPostId(Long userId, Long postId);
 	
-	@Query(value="select * from p_like where post_id in :postsIds limit 5", nativeQuery = true)
-	List<Like> findUserLikesByPostId(@Param("postsIds") List<Long> postsIds);
+	@Query(value="select 'liked', l.post_id, u.avatar, u.user_name from "
+			+ "p_like l left join user u on u.id = l.user_id "
+			+ "where l.post_id in :postsIds limit 5", nativeQuery = true)
+	List<Object> findUserLikesByPostId(@Param("postsIds") List<Long> postsIds);
 
 }
