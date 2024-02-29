@@ -53,6 +53,12 @@ public class PostService {
 	public Post getOnePostById(Long postId) {
 		return postRepository.findById(postId).orElse(null);
 	}
+	
+	public PostResponse getOnePostByIdWithLikes(Long postId) {
+		Post post = postRepository.findById(postId).orElse(null);
+		List<LikeResponse> likes = likeService.getAllLikes(Optional.of(postId), Optional.ofNullable(null));
+		return new PostResponse(post, likes);
+	}
 
 	//PostMapping Annotation
 	public Post createOnePost(PostCreateRequest newPostRequest) {

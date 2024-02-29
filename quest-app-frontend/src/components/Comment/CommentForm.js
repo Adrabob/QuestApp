@@ -52,7 +52,7 @@ function CommentForm(props) {
                     <InputAdornment position="start">
                         <Link style={{textDecoration:'none'}} to={{pathname : '/users/' + userId}} >
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" >
-                                {userName.charAt(0).toUpperCase()}
+                                {localStorage.getItem("userName").charAt(0).toUpperCase() + localStorage.getItem("userName").slice(1).charAt(0).toUpperCase()}
                             </Avatar>
                         </Link>
                         

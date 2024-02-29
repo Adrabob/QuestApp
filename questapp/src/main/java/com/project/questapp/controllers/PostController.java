@@ -35,15 +35,15 @@ public class PostController {
 	}
 	
 	@GetMapping("/{postId}")
-	public Post getOnePost(@PathVariable Long postId) {
-		return postService.getOnePostById(postId);
+	public PostResponse getOnePost(@PathVariable Long postId) {
+		return postService.getOnePostByIdWithLikes(postId);
 	}
 	
 	@PostMapping
 	public Post createOnePost(@RequestBody PostCreateRequest newPostRequest) {
 		return postService.createOnePost(newPostRequest);                                                                                           
 	}
-	
+		
 	@PutMapping("/{postId}")
 	public Post updateOnePost(@PathVariable Long postId,@RequestBody PostUpdateRequest newPostUpdateRequest) {
 		return postService.updateOnePostById(postId, newPostUpdateRequest);

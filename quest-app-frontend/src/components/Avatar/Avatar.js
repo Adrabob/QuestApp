@@ -6,16 +6,42 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { List, ListItem, ListItemSecondaryAction, Modal, Radio } from '@mui/material';
+import axios from 'axios';
 
 function Avatar(props) {
     const {avatarId} = props; 
     const [open, setOpen] = React.useState(false);
     const [selectedValue, setSelectedValue] = React.useState(avatarId);
     const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const handleClose = () => {
+        setOpen(false);
+        avatarSave();
+    }
+
+    const avatarSave = () => {
+      console.log(localStorage.getItem("currentUser"));
+
+        axios.put("/users/" + localStorage.getItem("currentUser"),
+        {
+            avatar: selectedValue
+        },
+        {
+            headers: {
+                "Authorization":localStorage.getItem("tokenKey"),
+                "Content-Type":"application/json"
+            }
+        })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+
+    }
+
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
-        console.log(localStorage.getItem("tokenKey"));
     }
 
   return (

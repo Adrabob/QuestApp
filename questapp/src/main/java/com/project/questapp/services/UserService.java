@@ -6,14 +6,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.project.questapp.entities.Comment;
-import com.project.questapp.entities.Like;
+
 import com.project.questapp.entities.User;
 import com.project.questapp.repos.CommentRepository;
 import com.project.questapp.repos.LikeRepository;
 import com.project.questapp.repos.PostRepository;
 import com.project.questapp.repos.UserRepository;
-import com.project.questapp.responses.CommentResponse;
+
 
 @Service
 public class UserService {
@@ -47,8 +46,12 @@ public class UserService {
 		Optional<User> user = userRepository.findById(userId);
 		if(user.isPresent()) {
 			User foundUser = user.get();
+			if(newUser.getPassword() != null && newUser.getUserName()!= null) {
 			foundUser.setUserName(newUser.getUserName());
 			foundUser.setPassword(newUser.getPassword());
+			}else {
+			foundUser.setAvatar(newUser.getAvatar());
+			}
 			userRepository.save(foundUser);
 			return foundUser;
 		}else {
