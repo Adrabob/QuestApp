@@ -18,8 +18,7 @@ import { useState } from 'react';
 import Comment from '../Comment/Comment';
 import { Container } from '@mui/material';
 import CommentForm from '../Comment/CommentForm';
-import axios from 'axios';
-// import { ReactDOM } from 'react';
+import { DeleteWithAuth, PostWithAuth } from '../../services/HttpService';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -64,9 +63,6 @@ function Post(props) {
     setRefresh(false);
   }
 
-
-  
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
     refreshComments();
@@ -78,12 +74,7 @@ function Post(props) {
 
     if (isLiked) { // User unliked the post
       try {
-        await axios.delete('/likes/' + likeId, {
-          headers: {
-            Authorization: localStorage.getItem("tokenKey"),
-            'Content-Type': 'application/json'
-          }
-        });
+        await DeleteWithAuth('/likes/' + likeId); // Delete like with likeId from state
         setLikeCount(likeCount - 1);
         setLikeId(null);
         setIsLiked(false);
@@ -92,14 +83,9 @@ function Post(props) {
       }
     } else { // User liked the post
       try {
-        const response = await axios.post('/likes', {
+        const response = await PostWithAuth('/likes', {
           postId,
           userId: localStorage.getItem("currentUser")
-        }, {
-          headers: {
-            Authorization: localStorage.getItem("tokenKey"),
-            'Content-Type': 'application/json'
-          }
         });
         setLikeId(response.data.id); // Set likeId immediately from response
         setLikeCount(likeCount + 1);

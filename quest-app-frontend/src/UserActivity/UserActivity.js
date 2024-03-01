@@ -1,8 +1,8 @@
 import { AppBar, Button, IconButton, Paper, Table, TableBody, TableContainer, TableHead, TablePagination, TableRow, Toolbar, Typography, Dialog, Slide, TableCell } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Post from "../components/Post/Post";
+import { GetWithAuth } from "../services/HttpService";
 const columns = [
     { 
         id: 'User UserActivity', 
@@ -31,13 +31,7 @@ const columns = [
     }, [isOpen]);
 
     const getPost = () => {
-      axios.get("/posts/" + postId,
-      {
-          headers: {
-            "Authorization":localStorage.getItem("tokenKey"),
-            "Content-Type":"application/json"
-          }
-      })
+     GetWithAuth("/posts/" + postId)
       .then((response) => {
           setPost(response.data);
       })
@@ -98,13 +92,7 @@ const columns = [
     }, []);
 
     const getActivity = () => {
-      axios.get("/users/activity/" + userId,
-      {
-          headers: {
-            "Authorization":localStorage.getItem("tokenKey"),
-            "Content-Type":"application/json"
-          }
-      })
+     GetWithAuth("/users/activity/" + userId)
       .then((response) => {
           setIsLoaded(true);
           console.log(response.data);

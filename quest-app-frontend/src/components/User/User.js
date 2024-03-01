@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import UserActivity from "../../UserActivity/UserActivity";
 import Avatar from "../Avatar/Avatar";
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { GetWithAuth } from "../../services/HttpService";
 
 function User() {
     const { userId } = useParams();
@@ -13,13 +13,7 @@ function User() {
     }, []);
 
     const getUser = () => {
-        axios.get("/users/" + userId,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": localStorage.getItem("tokenKey")
-                }
-            })
+        GetWithAuth("/users/" + userId)
             .then((response) => {
                 
                 setUser(response.data);

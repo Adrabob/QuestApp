@@ -6,7 +6,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { List, ListItem, ListItemSecondaryAction, Modal, Radio } from '@mui/material';
-import axios from 'axios';
+import { PutWithAuth } from '../../services/HttpService';
 
 function Avatar(props) {
     const {avatarId} = props; 
@@ -21,15 +21,9 @@ function Avatar(props) {
     const avatarSave = () => {
       console.log(localStorage.getItem("currentUser"));
 
-        axios.put("/users/" + localStorage.getItem("currentUser"),
+        PutWithAuth("/users/" + localStorage.getItem("currentUser"),
         {
             avatar: selectedValue
-        },
-        {
-            headers: {
-                "Authorization":localStorage.getItem("tokenKey"),
-                "Content-Type":"application/json"
-            }
         })
         .then((response) => {
             console.log(response);

@@ -8,8 +8,7 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 import { Alert, Button, InputAdornment, OutlinedInput, Snackbar} from '@mui/material';
-import axios from 'axios';
-// import { ReactDOM } from 'react';
+import { PostWithAuth } from '../../services/HttpService';
 
 
 function PostForm(props) {
@@ -20,14 +19,10 @@ function PostForm(props) {
   
 
     const savePost = () => {
-        axios.post('/posts', {
+        PostWithAuth('/posts', {
             title: title,
             text: text,
             userId: userId
-          },{
-            headers: {
-              "Authorization": localStorage.getItem("tokenKey"), 
-              'Content-Type': 'application/json'},
           })
           .then(function (response) {
             console.log(response);

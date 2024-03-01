@@ -1,7 +1,7 @@
 import { Button, FormControl, FormHelperText, Input, InputLabel } from "@mui/material";
-import axios from "axios";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { PostWithoutAuth } from "../../services/HttpService";
 
 function Auth() {
 
@@ -18,7 +18,7 @@ function Auth() {
     }
 
     const sendRequest = (path) => {
-        axios.post("/auth/"+path, {
+        PostWithoutAuth("/auth/"+path, {
             userName: username,
             password: password
         })
@@ -31,6 +31,7 @@ function Auth() {
         })
         .catch((error) => {
             console.log(error);
+            navigate(0);
         });
         
     }

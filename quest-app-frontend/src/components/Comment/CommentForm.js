@@ -2,22 +2,18 @@ import { Avatar, Button, CardContent, InputAdornment, OutlinedInput } from '@mui
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { red } from '@mui/material/colors';
-import axios from 'axios';
+import { PostWithAuth } from '../../services/HttpService';
 
 function CommentForm(props) {
-    const { userName, userId, postId, setCommentRefresh } = props;
+    const { userId, postId, setCommentRefresh } = props;
     const [text, setText] = React.useState('');
 
 
     const saveComment = () => {
-        axios.post('/comments', {
+        PostWithAuth('/comments', {
             postId: postId,
             text: text,
             userId: userId
-          },{
-            headers: {
-              "Authorization": localStorage.getItem("tokenKey"), 
-              'Content-Type': 'application/json'},
           })
           .then(function (response) {
             console.log(response);
@@ -52,7 +48,7 @@ function CommentForm(props) {
                     <InputAdornment position="start">
                         <Link style={{textDecoration:'none'}} to={{pathname : '/users/' + userId}} >
                             <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" >
-                                {localStorage.getItem("userName").charAt(0).toUpperCase() + localStorage.getItem("userName").slice(1).charAt(0).toUpperCase()}
+                                {localStorage.getItem("userName").charAt(0).toUpperCase()}
                             </Avatar>
                         </Link>
                         
