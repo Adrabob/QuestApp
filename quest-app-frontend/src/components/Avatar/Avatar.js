@@ -9,7 +9,7 @@ import { List, ListItem, ListItemSecondaryAction, Modal, Radio } from '@mui/mate
 import { PutWithAuth } from '../../services/HttpService';
 
 function Avatar(props) {
-    const {avatarId} = props; 
+    const {avatarId, userId, userName} = props; 
     const [open, setOpen] = React.useState(false);
     const [selectedValue, setSelectedValue] = React.useState(avatarId);
     const handleOpen = () => setOpen(true);
@@ -49,14 +49,15 @@ function Avatar(props) {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
-          {localStorage.getItem("userName")}
+          {userName}
         </Typography>
         <Typography variant="body2" color="text.secondary" component="p">
-         UserId = {localStorage.getItem("currentUser")}
+         UserId = {userId}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={handleOpen} >Change Avatar</Button>
+      {localStorage.getItem("currentUser") === userId ? <Button size="small" color='inherit' onClick={handleOpen} >Change Avatar</Button> : ""}
+        
       </CardActions>
     </Card>
     

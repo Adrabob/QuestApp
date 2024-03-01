@@ -1,4 +1,4 @@
-import { Button, FormControl, FormHelperText, Input, InputLabel } from "@mui/material";
+import { Button, FormControl, FormHelperText, TextField } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { PostWithoutAuth } from "../../services/HttpService";
@@ -48,14 +48,19 @@ function Auth() {
     return (
         
             <FormControl>
-                <InputLabel style={{top:10}}>Username</InputLabel>
-                <Input
+                
+                <TextField
+                style={{top:20}}
+                label="Username"
+                type="text"
                 onChange={(e) => {
                         handleUsername(e.target.value);
                 }}
                 />
-                <InputLabel style={{top:95}} >Password</InputLabel>
-                <Input style={{top:40}}
+                
+                <TextField style={{top:40}}
+                label="Password"
+                type="password"
                 onChange={(e) => {
                     handlePassword(e.target.value);
                 }}
@@ -67,7 +72,7 @@ function Auth() {
                 onClick={() => handleButton("register")}
                 >Register
                 </Button>
-                <FormHelperText style={{margin:20}}>Already have an account? Login</FormHelperText>
+                <FormHelperText style={{margin:25}}>Already have an account?</FormHelperText>
                 <Button 
                 variant="contained" 
                 sx={{ background: 'linear-gradient(to right top, #f30101, #60060c)'}}

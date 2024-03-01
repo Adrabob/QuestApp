@@ -3,15 +3,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import React, { useEffect, useState } from "react";
 import Post from "../components/Post/Post";
 import { GetWithAuth } from "../services/HttpService";
-const columns = [
-    { 
-        id: 'User UserActivity', 
-        label: 'User Activity', 
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toLocaleString('en-US'),
-    },
-  ];
 
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -54,9 +45,11 @@ const columns = [
         fullScreen
         open={open}
         TransitionComponent={Transition}
+        scroll="body"
       >
         <AppBar sx={{ position: 'relative' }}>
-          <Toolbar>
+          <Toolbar
+          sx={{ background: 'linear-gradient(to right top, #f30101, #60060c)'}}>
             <IconButton
               edge="start"
               color="inherit"

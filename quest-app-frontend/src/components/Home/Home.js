@@ -36,12 +36,9 @@ function Home() {
         return <div>Loading...</div>;
     } else {
         return (
-            
-    
-      
       <div style={{backgroundColor:'#FFFAF0', display:'flex', flexWrap:'wrap', justifyContent:'center', alignItems:'center'  }} >
       {localStorage.getItem("currentUser") === null ?"":<PostForm userId={localStorage.getItem("currentUser")} userName={localStorage.getItem("userName")} refreshPost={refreshPost}/>}
-            
+          
                 {postList.map(post => (
                     <Post likes={post.postLikes} postId={post.id} userId={post.userId} userName={post.userName} title={post.title} text={post.text}></Post> 
                      
