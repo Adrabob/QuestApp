@@ -6,4 +6,6 @@ import com.project.questapp.entities.RefreshToken;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
 
+	RefreshToken findByUserId(Long id);
+
 }

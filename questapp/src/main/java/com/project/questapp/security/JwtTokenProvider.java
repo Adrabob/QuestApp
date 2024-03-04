@@ -33,6 +33,15 @@ public class JwtTokenProvider {
 				.signWith(SignatureAlgorithm.HS512, APP_SECRET).compact();
 	}
 	
+	public String generateJwtTokenByUserName(Long userId) {
+		Date expireDate = new Date(new Date().getTime() + EXPIRES_IN);
+		return Jwts.builder()
+				.setSubject(Long.toString(userId))
+				.setIssuedAt(new Date())
+				.setExpiration(expireDate)
+				.signWith(SignatureAlgorithm.HS512, APP_SECRET).compact();
+	}
+	
 	Long getUserIdFromJwt(String token) {
 		Claims claims = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(token).getBody();
 		return Long.parseLong(claims.getSubject());
@@ -59,5 +68,7 @@ public class JwtTokenProvider {
 		Date expiration = Jwts.parser().setSigningKey(APP_SECRET).parseClaimsJws(token).getBody().getExpiration();
 		return expiration.before(new Date());
 	}
+
+	
 	
 }
