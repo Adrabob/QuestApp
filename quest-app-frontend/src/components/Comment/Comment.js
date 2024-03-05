@@ -1,12 +1,24 @@
-import { Avatar, CardContent, InputAdornment, OutlinedInput } from '@mui/material';
+import { Avatar, Button, CardContent, InputAdornment, OutlinedInput } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { red } from '@mui/material/colors';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import { DeleteWithAuth } from '../../services/HttpService';
 
 
 function Comment(props) {
-    const { userName, text, userId } = props;
+    const { userName, text, userId, commentId, refreshComments} = props;
+    const handleDelete = () => {
+        
+        DeleteWithAuth('/comments/' + commentId)
+        .then((response) => {
+            console.log(response);
+            refreshComments();
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    }
 
     return (
         <div>
@@ -32,7 +44,11 @@ function Comment(props) {
                         </Link>
                     </InputAdornment>
                 }
-                
+                endAdornment={
+                    <InputAdornment position="end">
+                        {localStorage.getItem("currentUser") === ""+userId ? <Button variant='' onClick={() => handleDelete()}><DeleteIcon /></Button> : ""}
+                    </InputAdornment>
+                }
                 >
                 </OutlinedInput>
             </CardContent>

@@ -43,3 +43,14 @@ export const PostWithoutAuth = (url, body) => {
         }
     })
 }
+
+export const RefreshToken = () => {
+    return axios.post("/auth/refresh",{
+        userId: localStorage.getItem("currentUser"),
+        refreshToken: localStorage.getItem("refreshKey")
+        },{
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+}

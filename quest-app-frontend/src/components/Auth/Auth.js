@@ -24,7 +24,8 @@ function Auth() {
         })
         .then((response) => {
             console.log(response);
-            localStorage.setItem("tokenKey", response.data.message);
+            localStorage.setItem("tokenKey", response.data.accessToken);
+            localStorage.setItem("refreshKey", response.data.refreshToken);
             localStorage.setItem("currentUser", response.data.userId);
             localStorage.setItem("userName", username);
             navigate(0);
@@ -40,9 +41,6 @@ function Auth() {
         sendRequest(value);
         setPassword("");
         setUsername("");
-        console.log(localStorage.getItem("tokenKey"));
-        console.log(localStorage.getItem("currentUser"));
-        console.log(localStorage.getItem("userName"));
     }
 
     return (
