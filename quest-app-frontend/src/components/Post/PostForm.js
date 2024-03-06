@@ -6,9 +6,9 @@ import CardContent from '@mui/material/CardContent';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Alert, Button, InputAdornment, OutlinedInput, Snackbar} from '@mui/material';
-import { PostWithAuth } from '../../services/HttpService';
+import { PostWithAuth, RefreshToken } from '../../services/HttpService';
 
 
 function PostForm(props) {
@@ -16,7 +16,15 @@ function PostForm(props) {
     const [title, setTitle] = React.useState('');
     const [text, setText] = React.useState('');
     const [isSent, setIsSent] = React.useState(false);
-  
+    const navigate = useNavigate();
+
+    const logout = () => {
+      localStorage.removeItem("currentUser");
+      localStorage.removeItem("tokenKey");
+      localStorage.removeItem("refreshKey");
+      localStorage.removeItem("userName");
+      navigate(0);
+    }
 
     const savePost = () => {
         PostWithAuth('/posts', {
@@ -26,13 +34,29 @@ function PostForm(props) {
           })
           .then(function (response) {
             console.log(response);
-            
+            refreshPost();
           })
-          .catch(function (error) {
-            console.log(error);
-            console.log(text);
-            console.log(title);
-          });
+          .catch(error => {
+            if(error.response.status === 401){
+                RefreshToken()
+                .then((response) => {
+                    console.log(response);
+                    if(!response.status === 200){
+                        logout();
+                    }else if(response.data.accessToken != null){
+                        console.log(response.data);
+                        localStorage.setItem("tokenKey", response.data.accessToken);
+                        savePost();
+                        refreshPost();
+                    }else{
+                        console.log("Token is null");
+                    }})
+                .catch((error) => {
+                  console.log(error);
+                })
+            }else{
+                console.log(error);
+            }});
     }   
 
     const handleSubmit = () => {
@@ -40,7 +64,6 @@ function PostForm(props) {
         setIsSent(true);
         setTitle('');
         setText('');
-        refreshPost();
     }
 
     const handleTitle = (title) => {

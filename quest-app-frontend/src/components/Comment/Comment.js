@@ -8,8 +8,8 @@ import { DeleteWithAuth } from '../../services/HttpService';
 
 function Comment(props) {
     const { userName, text, userId, commentId, refreshComments} = props;
+    
     const handleDelete = () => {
-        
         DeleteWithAuth('/comments/' + commentId)
         .then((response) => {
             console.log(response);

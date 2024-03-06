@@ -19,6 +19,9 @@ import Comment from '../Comment/Comment';
 import { Container } from '@mui/material';
 import CommentForm from '../Comment/CommentForm';
 import { DeleteWithAuth, PostWithAuth } from '../../services/HttpService';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Button } from '@mui/material';
+import { InputAdornment } from '@mui/material';
 
 const ExpandMore = styled((props) => {
     const { expand, ...other } = props;
@@ -31,7 +34,7 @@ const ExpandMore = styled((props) => {
   }));
  
 function Post(props) {
-  const { userName, title, text, postId, userId, likes} = props;
+  const { userName, title, text, postId, userId, likes, refreshPost} = props;
   const [expanded, setExpanded] = React.useState(false);
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -45,6 +48,17 @@ function Post(props) {
   const setCommentRefresh = () => {
     setRefresh(true);
   }
+
+  const handleDelete = () => {
+    DeleteWithAuth('/posts/' + postId)
+    .then((response) => {
+        console.log(response);
+        refreshPost();
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
 
   const refreshComments = () => {
     fetch("/comments?postId=" + postId)
@@ -154,6 +168,9 @@ function Post(props) {
         >
           <CommentIcon style={expanded ? null : {color:'blue'}} />
         </ExpandMore>
+        <InputAdornment position="end">
+          {localStorage.getItem("currentUser") === ""+userId ? <Button variant='' onClick={() => handleDelete()}><DeleteIcon /></Button> : ""}
+        </InputAdornment>
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
       
