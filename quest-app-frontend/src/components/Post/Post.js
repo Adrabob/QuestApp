@@ -12,13 +12,13 @@ import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CommentIcon from '@mui/icons-material/Comment';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import Comment from '../Comment/Comment';
 import { Container } from '@mui/material';
 import CommentForm from '../Comment/CommentForm';
-import { DeleteWithAuth, PostWithAuth } from '../../services/HttpService';
+import { DeleteWithAuth, PostWithAuth, RefreshToken } from '../../services/HttpService';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from '@mui/material';
 import { InputAdornment } from '@mui/material';
@@ -44,20 +44,48 @@ function Post(props) {
   const [likeCount, setLikeCount] = useState(likes.length);
   const [likeId, setLikeId] = useState(null);
   const [refresh, setRefresh] = useState(false);
+  const navigate = useNavigate();
 
   const setCommentRefresh = () => {
     setRefresh(true);
   }
 
+  const logout = () => {
+    localStorage.removeItem("currentUser");
+    localStorage.removeItem("tokenKey");
+    localStorage.removeItem("refreshKey");
+    localStorage.removeItem("userName");
+    navigate(0);
+  }
+
   const handleDelete = () => {
     DeleteWithAuth('/posts/' + postId)
-    .then((response) => {
-        console.log(response);
-        refreshPost();
+    .then(function (response) {
+      console.log(response);
+      refreshPost();
     })
-    .catch((error) => {
-        console.log(error);
-    });
+    .catch(error => {
+      if(error.response.status === 401){
+          RefreshToken()
+          .then((response) => {
+              console.log(response);
+              if(!response.status === 200){
+                  logout();
+              }else if(response.data.accessToken != null){
+                  console.log(response.data);
+                  localStorage.setItem("tokenKey", response.data.accessToken);
+                  handleDelete();
+                  refreshPost();
+              }else{
+                  console.log("Token is null");
+              }})
+          .catch((error) => {
+            console.log(error);
+          })
+      }else{
+          console.log(error);
+      }});
+
 }
 
   const refreshComments = () => {
